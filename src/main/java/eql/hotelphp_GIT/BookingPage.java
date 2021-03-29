@@ -10,8 +10,13 @@ import org.openqa.selenium.support.ui.Select;
 
 public class BookingPage {
 	
-	@FindBy (xpath = "//div[@class='scheduler_default_cell scheduler_default_cell_business']")
+	@FindBy (xpath = "//div[@style='left: 0px; top: 0px; width: 40px; height: 50px; position: absolute;']")
 	private WebElement firstCell;
+	
+	@FindBy (xpath = "//div[@style='left: 40px; top: 0px; width: 40px; height: 50px; position: absolute;']")
+	private WebElement secondCell;
+	
+	
 	
 	@FindBy (tagName = "iframe")
 	private WebElement framePopup;
@@ -33,6 +38,17 @@ public class BookingPage {
 		driver.switchTo().frame(framePopup.getAttribute("id"));
 	}
 	
+	
+	
+	public WebElement getFirstCell() {
+		return firstCell;
+	}
+
+	public WebElement getSecondCell() {
+		return secondCell;
+	}
+
+
 	public void createNewResa(WebDriver driver, String str, String roomValue) {
 		ToolBox.fillInput(nameField, str);
 		

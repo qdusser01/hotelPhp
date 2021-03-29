@@ -16,7 +16,8 @@ public class BookingPage {
 	@FindBy (xpath = "//div[@style='left: 40px; top: 0px; width: 40px; height: 50px; position: absolute;']")
 	private WebElement secondCell;
 	
-	
+	@FindBy (xpath = "//div[.='Update successful']")
+	private WebElement updateMessage;
 	
 	@FindBy (tagName = "iframe")
 	private WebElement framePopup;
@@ -62,6 +63,10 @@ public class BookingPage {
 	
 	public WebElement getCellFilled(int indexCell) {
 		return listCellsFilled.get(indexCell);
+	}
+	
+	public WebElement getUpdateMessage() {
+		return updateMessage;
 	}
 
 }

@@ -8,8 +8,10 @@ import org.openqa.selenium.support.PageFactory;
 
 
 
-public class creationResaTest extends AbstractTest{
-
+public class creationResaTest extends AbstractTest {
+	
+	String newResa = "resa 1";
+	String roomNumber = "1";
 	
 	@Before
 	public void setup() {
@@ -25,8 +27,9 @@ public class creationResaTest extends AbstractTest{
 		
 		booking_page.clickFirstCell(driver);
 		
-		
-		
-	}
+		booking_page.createNewResa(driver, newResa, roomNumber);
 
+		String actualResa = booking_page.getCellFilled(0).getText();
+		assertTrue("La reservation ne correspond pas à celle créée", actualResa.contains(newResa));
+	}
 }

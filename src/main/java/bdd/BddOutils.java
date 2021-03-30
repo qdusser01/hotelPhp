@@ -1,10 +1,16 @@
 package bdd;
 
 import java.io.File;
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
+import org.dbunit.Assertion;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
+import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 
@@ -18,8 +24,8 @@ public class BddOutils {
 		return new FlatXmlDataSetBuilder().build(new File(filename));
 	}
 
-	public static void insertData(String path_to_file) throws Exception {
-		IDataSet dataset = readDataSet(path_to_file);
+	public static void insertData(String path_to_file, int startDay) throws Exception {
+		IDataSet dataset = dateUpdate(path_to_file,startDay);
 		IDatabaseTester databaseTester = new JdbcDatabaseTester(DRIVER, JDBC_URL, USER, PASSWORD);
 		databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
 		databaseTester.setDataSet(dataset);
@@ -32,5 +38,28 @@ public class BddOutils {
 		databaseTester.setSetUpOperation(DatabaseOperation.DELETE_ALL);
 		databaseTester.setDataSet(dataset);
 		databaseTester.onSetup();
+	}
+
+	public static void compareData(String table, String path_to_file, int startDay, String... col) throws SQLException, Exception {
+		IDatabaseTester databaseTester = new JdbcDatabaseTester(DRIVER, JDBC_URL, USER, PASSWORD);
+		IDataSet databaseDataSet = databaseTester.getConnection().createDataSet();
+		ITable actualTable =databaseDataSet.getTable(table);
+		IDataSet expectedDataSet=dateUpdate(path_to_file,startDay);
+		ITable expectedTable =expectedDataSet.getTable(table);
+		String tab[]= col;
+		Assertion.assertEqualsIgnoreCols(expectedTable, actualTable, tab);
+	}
+
+	public static IDataSet dateUpdate(String path_to_file, int startDay) throws Exception {
+		IDataSet data = readDataSet(path_to_file);
+		Calendar date = new GregorianCalendar();
+		ReplacementDataSet rData = new ReplacementDataSet(data);
+		rData.addReplacementObject("[current_date]", date.get(Calendar.YEAR) + "-" + (date.get(Calendar.MONTH) + 1)
+				+ "-" +startDay+ " 12:00:00");
+		int endDay = startDay+1;
+		Calendar end_date = date;
+		rData.addReplacementObject("[next_date]", end_date.get(Calendar.YEAR) + "-" + (end_date.get(Calendar.MONTH) + 1)
+				+ "-" +endDay+ " 12:00:00");
+		return rData;
 	}
 }

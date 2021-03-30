@@ -19,6 +19,9 @@ public class BookingPage {
 	@FindBy (xpath = "//div[.='Update successful']")
 	private WebElement updateMessage;
 	
+	@FindBy (xpath = "//div[.='Deleted.']")
+	private WebElement deleteMessage;
+	
 	@FindBy (tagName = "iframe")
 	private WebElement framePopup;
 	
@@ -34,11 +37,17 @@ public class BookingPage {
 	@FindBy (xpath = "//div[@class='scheduler_default_event_inner']")
 	private List<WebElement> listCellsFilled;
 	
+	@FindBy (xpath ="//div[@class='scheduler_default_event_delete']")
+	private WebElement deleteResaButton;
+	
+	public void clickDeleteResaButton() {
+		deleteResaButton.click();
+	}
+	
 	public void clickFirstCell(WebDriver driver) {
 		firstCell.click();
 		driver.switchTo().frame(framePopup.getAttribute("id"));
-	}
-	
+	}	
 	
 	
 	public WebElement getFirstCell() {
@@ -67,6 +76,10 @@ public class BookingPage {
 	
 	public WebElement getUpdateMessage() {
 		return updateMessage;
+	}
+	
+	public WebElement getDeleteMessage() {
+		return deleteMessage;
 	}
 
 }

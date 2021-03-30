@@ -2,6 +2,7 @@ package eql.hotelphp_GIT;
 
 import static org.junit.Assert.*;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
@@ -9,11 +10,14 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import bdd.BddOutils;
+
 public class DragandDropTest extends AbstractTest {
 	
 	@Before
-	public void setup() {
+	public void setup() throws Exception {
 		selectBrowser(browser);
+		BddOutils.insertData("src/test/resources/insertReservation.xml");
 	}	
 	
 	@Test
@@ -30,9 +34,12 @@ public class DragandDropTest extends AbstractTest {
 		assertTrue(updateMessage.isDisplayed());
 		wait.until(ExpectedConditions.invisibilityOf(updateMessage));
 		assertFalse(updateMessage.isDisplayed());
-		
 	}
 	
+	@After
+	public void endTest() throws Exception {
+		BddOutils.deleteAllData("src/test/resources/deleteReservation.xml");
+	}
 	
 
 }

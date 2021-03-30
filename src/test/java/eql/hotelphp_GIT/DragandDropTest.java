@@ -43,9 +43,11 @@ public class DragandDropTest extends AbstractTest {
 	}
 
 	
-//	@After
+	@After
 	public void endTest() throws Exception {
 		BddOutils.deleteAllData("src/test/resources/deleteReservation.xml");
+		ToolBox.takeSnapShot(driver,"src/test/snapshots/execution_"+this.getClass().getName()+".png");
+		driver.quit();
 	}
 	
 
